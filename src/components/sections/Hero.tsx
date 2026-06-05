@@ -145,7 +145,7 @@ export function Hero() {
           className="flex flex-col sm:flex-row items-center gap-6"
         >
           <Button variant="cyber">Join The Grid</Button>
-          <Button variant="outline">View Tournaments</Button>
+          <Button variant="outline">News</Button>
         </motion.div>
       </div>
     </section>
