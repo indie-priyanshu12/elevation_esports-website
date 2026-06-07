@@ -25,7 +25,7 @@ export function Contact() {
           >
             <div className="bg-glass backdrop-blur-xl border border-neon-cyan/30 p-10 relative overflow-hidden rounded-lg group hover:border-neon-cyan transition-colors duration-500">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon-cyan to-transparent opacity-50 group-hover:opacity-100" />
-              
+
               <h3 className="font-display font-bold text-ice text-2xl uppercase tracking-cyber mb-8 flex items-center">
                 <span className="w-2 h-2 bg-neon-pink mr-3 animate-pulse" />
                 Initialize Uplink
@@ -61,13 +61,13 @@ export function Contact() {
             <div>
               <h3 className="font-display font-bold text-cyber-purple text-xl uppercase tracking-cyber mb-6">Social Nodes</h3>
               <div className="flex space-x-6">
-                <a href="#" title="Instagram" className="w-14 h-14 bg-glass border border-white/10 flex items-center justify-center text-ice hover:text-void hover:bg-neon-pink hover:border-neon-pink transition-all duration-300 transform -skew-x-12 hover:scale-110">
+                <a href="https://www.instagram.com/elevationesportsindia/" title="Instagram" className="w-14 h-14 bg-glass border border-white/10 flex items-center justify-center text-ice hover:text-void hover:bg-neon-pink hover:border-neon-pink transition-all duration-300 transform -skew-x-12 hover:scale-110">
                   <div className="font-display font-bold text-xl skew-x-12">IG</div>
                 </a>
                 <a href="#" title="YouTube" className="w-14 h-14 bg-glass border border-white/10 flex items-center justify-center text-ice hover:text-void hover:bg-neon-cyan hover:border-neon-cyan transition-all duration-300 transform -skew-x-12 hover:scale-110">
                   <div className="font-display font-bold text-xl skew-x-12">YT</div>
                 </a>
-                <a href="#" title="Discord" className="w-14 h-14 bg-glass border border-white/10 flex items-center justify-center text-ice hover:text-void hover:bg-cyber-purple hover:border-cyber-purple transition-all duration-300 transform -skew-x-12 hover:scale-110">
+                <a href="https://discord.gg/PEjbSkNmb8" title="Discord" className="w-14 h-14 bg-glass border border-white/10 flex items-center justify-center text-ice hover:text-void hover:bg-cyber-purple hover:border-cyber-purple transition-all duration-300 transform -skew-x-12 hover:scale-110">
                   <div className="font-display font-bold text-xl skew-x-12">DC</div>
                 </a>
               </div>
