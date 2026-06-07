@@ -24,6 +24,8 @@ This project is a cyberpunk-styled frontend with animated sections, glowing UI e
 - Tailwind CSS v4
 - Framer Motion
 - Lucide React
+- MySQL
+- mysql2
 
 ## Pages
 
@@ -68,12 +70,48 @@ npm run dev
 http://localhost:3000
 ```
 
+## Backend Setup
+
+1. Copy the example environment file and fill in your MySQL credentials:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Create a MySQL database, for example:
+
+```sql
+CREATE DATABASE elevation_esports;
+```
+
+3. Start the app:
+
+```bash
+npm run dev
+```
+
+On first backend access, the app will:
+
+- connect to MySQL
+- create the core tables for `users`, `news_posts`, and `tournaments`
+- seed sample tournament records if the `tournaments` table is empty
+
+If MySQL is not configured yet, the tournament hub falls back to seeded sample data so the UI still works.
+
 ## Available Scripts
 
 - `npm run dev` : Start the local development server
 - `npm run build` : Create a production build
 - `npm run start` : Start the production server
 - `npm run lint` : Run ESLint
+
+## API Endpoints
+
+- `GET /api/tournaments` : Return upcoming and completed tournament data
+- `POST /api/tournaments` : Create a tournament
+- `GET /api/tournaments/[slug]` : Return one tournament
+- `PATCH /api/tournaments/[slug]` : Update one tournament
+- `DELETE /api/tournaments/[slug]` : Delete one tournament
 
 ## Design Notes
 
@@ -83,7 +121,7 @@ http://localhost:3000
 
 ## Current Status
 
-This is currently a frontend-focused project. Some actions use sample data or placeholder links, especially inside the tournament hub and contact flow.
+This project now includes a backend foundation for MySQL-backed tournament data. News, users, and future site content have starter tables ready in the schema, while the frontend still includes some placeholder links and unfinished flows.
 
 ## Future Improvements
 

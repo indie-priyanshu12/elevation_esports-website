@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GameSelection } from "@/components/tournament/GameSelection";
 import { TournamentTabs } from "@/components/tournament/TournamentTabs";
+import { getTournamentHubData } from "@/lib/tournaments/service";
 
 export const metadata: Metadata = {
   title: "Tournament Hub",
   description: "Explore and register for esports tournaments.",
 };
 
-export default function TournamentHubPage() {
+export default async function TournamentHubPage() {
+  const tournamentHubData = await getTournamentHubData();
+
   return (
     <main className="relative min-h-screen bg-void text-ice overflow-x-hidden">
       {/* Back button — pinned top-left */}
@@ -34,10 +37,18 @@ export default function TournamentHubPage() {
           Tournament Hub
         </h1>
 
+        {tournamentHubData.source === "seed" ? (
+          <p className="rounded-full border border-neon-cyan/30 bg-neon-cyan/10 px-4 py-2 text-center font-sans text-sm text-neon-cyan">
+            Showing seeded sample tournaments. Connect MySQL to load live backend data.
+          </p>
+        ) : null}
+
         <GameSelection />
 
-        {/* Tab buttons */}
-        <TournamentTabs />
+        <TournamentTabs
+          upcomingTournaments={tournamentHubData.upcoming}
+          completedTournaments={tournamentHubData.completed}
+        />
       </section>
     </main>
   );

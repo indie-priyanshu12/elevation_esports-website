@@ -17,7 +17,7 @@ export function GameSelection({ onSelect }: { onSelect?: (gameId: string) => voi
   return (
     <motion.div
       className="grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:grid-rows-2"
-      style={{ minHeight: "24rem" }}
+      style={{ minHeight: "22rem" }}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

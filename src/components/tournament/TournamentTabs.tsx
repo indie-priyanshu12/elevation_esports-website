@@ -3,96 +3,21 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
+import type { TournamentRecord } from "@/lib/tournaments/types";
 
-type TournamentItem = {
-  name: string;
-  game: string;
-  formLink: string;
-  detailLink: string;
-  dateUploaded: string;
-  eventDate: string;
-  format: string;
-  status: string;
-  slots: string;
-};
-
-const upcomingTournaments: TournamentItem[] = [
-  {
-    name: "Neon Clash Open",
-    game: "Valorant",
-    formLink: "#register-neon-clash-open",
-    detailLink: "#details-neon-clash-open",
-    dateUploaded: "June 3, 2026",
-    eventDate: "June 14, 2026",
-    format: "5v5, double elimination",
-    status: "Registration live",
-    slots: "24/32 teams filled",
-  },
-  {
-    name: "Battleground Blitz Cup",
-    game: "BGMI",
-    formLink: "#register-battleground-blitz-cup",
-    detailLink: "#details-battleground-blitz-cup",
-    dateUploaded: "June 2, 2026",
-    eventDate: "June 18, 2026",
-    format: "Squads, 6-match finals",
-    status: "Roster lock in 4 days",
-    slots: "18/20 squads filled",
-  },
-  {
-    name: "Rocket Rumble Night",
-    game: "Rocket League",
-    formLink: "#register-rocket-rumble-night",
-    detailLink: "#details-rocket-rumble-night",
-    dateUploaded: "June 1, 2026",
-    eventDate: "June 21, 2026",
-    format: "3v3 Swiss into playoffs",
-    status: "Check-in opens soon",
-    slots: "12/16 teams filled",
-  },
-];
-
-const completedTournaments: TournamentItem[] = [
-  {
-    name: "Cyber Checkmate Series",
-    game: "Chess",
-    formLink: "#archive-cyber-checkmate-series",
-    detailLink: "#results-cyber-checkmate-series",
-    dateUploaded: "May 28, 2026",
-    eventDate: "May 30, 2026",
-    format: "Rapid Swiss, 7 rounds",
-    status: "Results published",
-    slots: "Winner: Arjun S.",
-  },
-  {
-    name: "Free Fire Flashpoint",
-    game: "Free Fire",
-    formLink: "#archive-free-fire-flashpoint",
-    detailLink: "#results-free-fire-flashpoint",
-    dateUploaded: "May 24, 2026",
-    eventDate: "May 27, 2026",
-    format: "Squads, points race",
-    status: "VOD and standings live",
-    slots: "Winner: Team Ember",
-  },
-  {
-    name: "Campus Counter-Strike Finals",
-    game: "CS2",
-    formLink: "#archive-campus-counter-strike-finals",
-    detailLink: "#results-campus-counter-strike-finals",
-    dateUploaded: "May 18, 2026",
-    eventDate: "May 22, 2026",
-    format: "5v5, BO3 playoffs",
-    status: "Highlights uploaded",
-    slots: "Winner: Headshot Unit",
-  },
-];
+function formatDisplayDate(value: string) {
+  return new Date(value).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
 
 function TournamentList({
   items,
   archived = false,
 }: {
-  items: TournamentItem[];
+  items: TournamentRecord[];
   archived?: boolean;
 }) {
   return (
@@ -117,8 +42,14 @@ function TournamentList({
                   </span>
                 </div>
                 <p className="font-sans text-sm text-ice/70">
-                  Event date: <span className="text-ice">{item.eventDate}</span>
+                  Event date: <span className="text-ice">{formatDisplayDate(item.eventDate)}</span>
                 </p>
+                {item.location ? (
+                  <p className="font-sans text-sm text-ice/60">Venue: {item.location}</p>
+                ) : null}
+                {item.summary ? (
+                  <p className="max-w-3xl font-sans text-sm text-ice/70">{item.summary}</p>
+                ) : null}
               </div>
 
               <div className="flex flex-wrap gap-3">
@@ -137,12 +68,12 @@ function TournamentList({
               </div>
             </CardHeader>
 
-            <CardContent className="grid gap-4 md:grid-cols-4">
+            <CardContent className="grid gap-4 md:grid-cols-5">
               <div>
                 <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-cyber-purple">
                   Date Uploaded
                 </p>
-                <p className="font-sans text-sm text-ice">{item.dateUploaded}</p>
+                <p className="font-sans text-sm text-ice">{formatDisplayDate(item.dateUploaded)}</p>
               </div>
               <div>
                 <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-cyber-purple">
@@ -155,6 +86,18 @@ function TournamentList({
                   Slots / Result
                 </p>
                 <p className="font-sans text-sm text-ice">{item.slots}</p>
+              </div>
+              <div>
+                <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-cyber-purple">
+                  Registration
+                </p>
+                <p className="font-sans text-sm text-ice">
+                  {item.registrationClosesAt
+                    ? `Closes ${formatDisplayDate(item.registrationClosesAt)}`
+                    : archived
+                      ? "Closed"
+                      : "See details"}
+                </p>
               </div>
               <div>
                 <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-cyber-purple">
@@ -174,7 +117,13 @@ function TournamentList({
   );
 }
 
-export const TournamentTabs = () => {
+export function TournamentTabs({
+  upcomingTournaments,
+  completedTournaments,
+}: {
+  upcomingTournaments: TournamentRecord[];
+  completedTournaments: TournamentRecord[];
+}) {
   const [active, setActive] = useState<"upcoming" | "completed">("upcoming");
 
   const handleClick = (tab: "upcoming" | "completed") => {
@@ -225,4 +174,4 @@ export const TournamentTabs = () => {
       </div>
     </div>
   );
-};
+}
