@@ -52,7 +52,7 @@ export async function getTournamentHubData(): Promise<TournamentHubData> {
     const tournaments = await listTournaments();
     return groupTournamentData(tournaments, "database");
   } catch (error) {
-    console.error("Failed to load tournaments from MySQL, using seed data instead.", error);
+    console.error("Failed to load tournaments from MongoDB, using seed data instead.", error);
     return fallbackTournamentData();
   }
 }
@@ -107,7 +107,7 @@ function validateInput(input: TournamentMutationInput) {
 
 export async function createTournamentEntry(input: TournamentMutationInput) {
   if (!isDatabaseConfigured()) {
-    throw new Error("MySQL is not configured.");
+    throw new Error("MongoDB is not configured.");
   }
 
   await ensureDatabaseReady();
@@ -122,7 +122,7 @@ export async function updateTournamentEntry(
   input: Partial<TournamentMutationInput>,
 ) {
   if (!isDatabaseConfigured()) {
-    throw new Error("MySQL is not configured.");
+    throw new Error("MongoDB is not configured.");
   }
 
   await ensureDatabaseReady();
@@ -165,7 +165,7 @@ export async function getTournamentEntry(slug: string) {
 
 export async function deleteTournamentEntry(slug: string) {
   if (!isDatabaseConfigured()) {
-    throw new Error("MySQL is not configured.");
+    throw new Error("MongoDB is not configured.");
   }
 
   await ensureDatabaseReady();

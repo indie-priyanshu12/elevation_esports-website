@@ -39,7 +39,7 @@ export default async function TournamentHubPage() {
 
         {tournamentHubData.source === "seed" ? (
           <p className="rounded-full border border-neon-cyan/30 bg-neon-cyan/10 px-4 py-2 text-center font-sans text-sm text-neon-cyan">
-            Showing seeded sample tournaments. Connect MySQL to load live backend data.
+            Showing seeded sample tournaments. Connect MongoDB to load live backend data.
           </p>
         ) : null}
 
