@@ -1,5 +1,5 @@
 export type TournamentRecord = {
-  id: number;
+  id: string;
   slug: string;
   name: string;
   game: string;

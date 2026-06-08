@@ -1,270 +1,118 @@
-import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
-import { getMysqlPool } from "@/lib/db/mysql";
+import { TournamentModel, ITournament } from "@/lib/db/models";
 import type { TournamentMutationInput, TournamentRecord } from "./types";
 
-type TournamentRow = RowDataPacket & {
-  id: number;
-  slug: string;
-  name: string;
-  game: string;
-  summary: string | null;
-  form_url: string;
-  detail_url: string;
-  uploaded_at: string;
-  event_date: string;
-  registration_closes_at: string | null;
-  format: string;
-  status: string;
-  slots_info: string;
-  location_label: string | null;
-  is_archived: number;
-};
-
-function mapRow(row: TournamentRow): TournamentRecord {
+function mapRow(row: ITournament): TournamentRecord {
   return {
-    id: row.id,
+    id: row._id.toString(),
     slug: row.slug,
     name: row.name,
     game: row.game,
-    summary: row.summary,
+    summary: row.summary ?? null,
     formLink: row.form_url,
     detailLink: row.detail_url,
-    dateUploaded: row.uploaded_at,
-    eventDate: row.event_date,
-    registrationClosesAt: row.registration_closes_at,
+    dateUploaded: row.uploaded_at.toISOString(),
+    eventDate: row.event_date.toISOString(),
+    registrationClosesAt: row.registration_closes_at ? row.registration_closes_at.toISOString() : null,
     format: row.format,
     status: row.status,
     slots: row.slots_info,
-    location: row.location_label,
-    archived: Boolean(row.is_archived),
+    location: row.location_label ?? null,
+    archived: row.is_archived,
   };
 }
 
-export async function listTournaments() {
-  const pool = getMysqlPool();
-  const [rows] = await pool.query<TournamentRow[]>(
-    `
-      SELECT
-        id,
-        slug,
-        name,
-        game,
-        summary,
-        form_url,
-        detail_url,
-        uploaded_at,
-        event_date,
-        registration_closes_at,
-        format,
-        status,
-        slots_info,
-        location_label,
-        is_archived
-      FROM tournaments
-      ORDER BY is_archived ASC, event_date ASC, uploaded_at DESC
-    `,
-  );
+export async function listTournaments(): Promise<TournamentRecord[]> {
+  const docs = await TournamentModel.find()
+    .sort({ is_archived: 1, event_date: 1, uploaded_at: -1 });
 
-  return rows.map(mapRow);
+  return docs.map(mapRow);
 }
 
-export async function getTournamentBySlug(slug: string) {
-  const pool = getMysqlPool();
-  const [rows] = await pool.query<TournamentRow[]>(
-    `
-      SELECT
-        id,
-        slug,
-        name,
-        game,
-        summary,
-        form_url,
-        detail_url,
-        uploaded_at,
-        event_date,
-        registration_closes_at,
-        format,
-        status,
-        slots_info,
-        location_label,
-        is_archived
-      FROM tournaments
-      WHERE slug = ?
-      LIMIT 1
-    `,
-    [slug],
-  );
-
-  return rows[0] ? mapRow(rows[0]) : null;
+export async function getTournamentBySlug(slug: string): Promise<TournamentRecord | null> {
+  const doc = await TournamentModel.findOne({ slug });
+  return doc ? mapRow(doc) : null;
 }
 
-export async function createTournament(input: TournamentMutationInput) {
+export async function createTournament(input: TournamentMutationInput): Promise<TournamentRecord | null> {
   if (!input.slug) {
     throw new Error("Tournament slug is required.");
   }
 
-  const pool = getMysqlPool();
-  await pool.execute<ResultSetHeader>(
-    `
-      INSERT INTO tournaments (
-        slug,
-        name,
-        game,
-        summary,
-        form_url,
-        detail_url,
-        uploaded_at,
-        event_date,
-        registration_closes_at,
-        format,
-        status,
-        slots_info,
-        location_label,
-        is_archived
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `,
-    [
-      input.slug,
-      input.name,
-      input.game,
-      input.summary ?? null,
-      input.formLink,
-      input.detailLink,
-      input.dateUploaded,
-      input.eventDate,
-      input.registrationClosesAt ?? null,
-      input.format,
-      input.status,
-      input.slots,
-      input.location ?? null,
-      input.archived ? 1 : 0,
-    ],
-  );
+  const doc = await TournamentModel.create({
+    slug: input.slug,
+    name: input.name,
+    game: input.game,
+    summary: input.summary ?? null,
+    form_url: input.formLink,
+    detail_url: input.detailLink,
+    uploaded_at: new Date(input.dateUploaded),
+    event_date: new Date(input.eventDate),
+    registration_closes_at: input.registrationClosesAt ? new Date(input.registrationClosesAt) : undefined,
+    format: input.format,
+    status: input.status,
+    slots_info: input.slots,
+    location_label: input.location ?? null,
+    is_archived: input.archived ?? false,
+  });
 
-  return getTournamentBySlug(input.slug);
+  return mapRow(doc);
 }
 
-export async function updateTournament(slug: string, input: TournamentMutationInput) {
+export async function updateTournament(slug: string, input: TournamentMutationInput): Promise<TournamentRecord | null> {
   if (!input.slug) {
     throw new Error("Tournament slug is required.");
   }
 
-  const pool = getMysqlPool();
-  await pool.execute(
-    `
-      UPDATE tournaments
-      SET
-        slug = ?,
-        name = ?,
-        game = ?,
-        summary = ?,
-        form_url = ?,
-        detail_url = ?,
-        uploaded_at = ?,
-        event_date = ?,
-        registration_closes_at = ?,
-        format = ?,
-        status = ?,
-        slots_info = ?,
-        location_label = ?,
-        is_archived = ?
-      WHERE slug = ?
-    `,
-    [
-      input.slug,
-      input.name,
-      input.game,
-      input.summary ?? null,
-      input.formLink,
-      input.detailLink,
-      input.dateUploaded,
-      input.eventDate,
-      input.registrationClosesAt ?? null,
-      input.format,
-      input.status,
-      input.slots,
-      input.location ?? null,
-      input.archived ? 1 : 0,
-      slug,
-    ],
-  );
+  const updateData = {
+    slug: input.slug,
+    name: input.name,
+    game: input.game,
+    summary: input.summary ?? null,
+    form_url: input.formLink,
+    detail_url: input.detailLink,
+    uploaded_at: new Date(input.dateUploaded),
+    event_date: new Date(input.eventDate),
+    registration_closes_at: input.registrationClosesAt ? new Date(input.registrationClosesAt) : undefined,
+    format: input.format,
+    status: input.status,
+    slots_info: input.slots,
+    location_label: input.location ?? null,
+    is_archived: input.archived ?? false,
+  };
 
-  return getTournamentBySlug(input.slug ?? slug);
+  const doc = await TournamentModel.findOneAndUpdate({ slug }, updateData, { new: true });
+  return doc ? mapRow(doc) : null;
 }
 
-export async function deleteTournament(slug: string) {
-  const pool = getMysqlPool();
-  const [result] = await pool.execute<ResultSetHeader>(
-    `DELETE FROM tournaments WHERE slug = ?`,
-    [slug],
-  );
-
-  return result.affectedRows > 0;
+export async function deleteTournament(slug: string): Promise<boolean> {
+  const result = await TournamentModel.deleteOne({ slug });
+  return result.deletedCount > 0;
 }
 
-export async function countTournaments() {
-  const pool = getMysqlPool();
-  const [rows] = await pool.query<Array<RowDataPacket & { total: number }>>(
-    `SELECT COUNT(*) AS total FROM tournaments`,
-  );
-
-  return rows[0]?.total ?? 0;
+export async function countTournaments(): Promise<number> {
+  return TournamentModel.countDocuments();
 }
 
-export async function seedTournament(input: TournamentMutationInput) {
+export async function seedTournament(input: TournamentMutationInput): Promise<void> {
   if (!input.slug) {
     throw new Error("Tournament slug is required.");
   }
 
-  const pool = getMysqlPool();
-  await pool.execute(
-    `
-      INSERT INTO tournaments (
-        slug,
-        name,
-        game,
-        summary,
-        form_url,
-        detail_url,
-        uploaded_at,
-        event_date,
-        registration_closes_at,
-        format,
-        status,
-        slots_info,
-        location_label,
-        is_archived
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE
-        name = VALUES(name),
-        game = VALUES(game),
-        summary = VALUES(summary),
-        form_url = VALUES(form_url),
-        detail_url = VALUES(detail_url),
-        uploaded_at = VALUES(uploaded_at),
-        event_date = VALUES(event_date),
-        registration_closes_at = VALUES(registration_closes_at),
-        format = VALUES(format),
-        status = VALUES(status),
-        slots_info = VALUES(slots_info),
-        location_label = VALUES(location_label),
-        is_archived = VALUES(is_archived)
-    `,
-    [
-      input.slug,
-      input.name,
-      input.game,
-      input.summary ?? null,
-      input.formLink,
-      input.detailLink,
-      input.dateUploaded,
-      input.eventDate,
-      input.registrationClosesAt ?? null,
-      input.format,
-      input.status,
-      input.slots,
-      input.location ?? null,
-      input.archived ? 1 : 0,
-    ],
-  );
+  const updateData = {
+    name: input.name,
+    game: input.game,
+    summary: input.summary ?? null,
+    form_url: input.formLink,
+    detail_url: input.detailLink,
+    uploaded_at: new Date(input.dateUploaded),
+    event_date: new Date(input.eventDate),
+    registration_closes_at: input.registrationClosesAt ? new Date(input.registrationClosesAt) : undefined,
+    format: input.format,
+    status: input.status,
+    slots_info: input.slots,
+    location_label: input.location ?? null,
+    is_archived: input.archived ?? false,
+  };
+
+  await TournamentModel.findOneAndUpdate({ slug: input.slug }, updateData, { upsert: true, new: true });
 }

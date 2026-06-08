@@ -1,5 +1,4 @@
-import { getMysqlPool, isDatabaseConfigured } from "./mysql";
-import { coreSchemaStatements } from "./schema";
+import { connectToDatabase, isDatabaseConfigured } from "./mongoose";
 import { countTournaments, seedTournament } from "@/lib/tournaments/repository";
 import { seedTournaments } from "@/lib/tournaments/seed";
 
@@ -8,11 +7,7 @@ declare global {
 }
 
 async function bootstrapDatabase() {
-  const pool = getMysqlPool();
-
-  for (const statement of coreSchemaStatements) {
-    await pool.query(statement);
-  }
+  await connectToDatabase();
 
   const totalTournaments = await countTournaments();
   if (totalTournaments === 0) {

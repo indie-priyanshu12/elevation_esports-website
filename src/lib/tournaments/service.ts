@@ -1,5 +1,5 @@
 import { ensureDatabaseReady } from "@/lib/db/bootstrap";
-import { isDatabaseConfigured } from "@/lib/db/mysql";
+import { isDatabaseConfigured } from "@/lib/db/mongoose";
 import { seedTournaments } from "./seed";
 import {
   createTournament,
@@ -12,7 +12,7 @@ import type { TournamentHubData, TournamentMutationInput, TournamentRecord } fro
 
 function normalizeSeedRecord(input: TournamentMutationInput, index: number): TournamentRecord {
   return {
-    id: index + 1,
+    id: (index + 1).toString(),
     slug: input.slug ?? `seed-${index + 1}`,
     name: input.name,
     game: input.game,
