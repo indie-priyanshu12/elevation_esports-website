@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "Explore and register for esports tournaments.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function TournamentHubPage() {
   const tournamentHubData = await getTournamentHubData();
 
