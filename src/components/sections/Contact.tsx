@@ -50,7 +50,7 @@ export function Contact() {
               <h3 className="font-display font-bold text-cyber-purple text-xl uppercase tracking-cyber mb-6">Server Location</h3>
               <div className="flex items-center space-x-4 text-ice/80 font-sans mb-4 group hover:text-neon-cyan transition-colors">
                 <MapPin className="text-neon-cyan group-hover:animate-bounce" size={24} />
-                <span className="text-lg">Sector 4, Student Union<br />Main Campus Server</span>
+                <span className="text-lg">Chandigarh University, NH-05, Mohali<br />Main Campus Server</span>
               </div>
               <div className="flex items-center space-x-4 text-ice/80 font-sans group hover:text-neon-pink transition-colors">
                 <Mail className="text-neon-pink group-hover:animate-pulse" size={24} />
