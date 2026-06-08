@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -49,7 +50,7 @@ export function Footer() {
             <ul className="space-y-3 font-sans text-sm font-medium text-ice/70">
               <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-transform">Privacy Protocol</a></li>
               <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-transform">Terms of Use</a></li>
-              <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-transform">Rules of Engagement</a></li>
+              <li><Link href="/rules-of-engagement" className="hover:text-white hover:translate-x-1 inline-block transition-transform">Rules of Engagement</Link></li>
             </ul>
           </div>
         </div>
