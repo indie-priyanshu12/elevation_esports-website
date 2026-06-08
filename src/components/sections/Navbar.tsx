@@ -10,6 +10,7 @@ export function Navbar() {
         <ul className="flex space-x-6 items-center">
           <li><Link href="/" className="text-ice hover:text-neon-cyan transition">Home</Link></li>
           <li><Link href="/tournament-hub" className="text-ice hover:text-neon-cyan transition">Tournament Hub</Link></li>
+          <li><Link href="/news" className="text-ice hover:text-neon-cyan transition">News</Link></li>
           {/* other nav items can be added here */}
         </ul>
         <Button variant="cyber">Login</Button>

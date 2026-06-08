@@ -3,6 +3,7 @@
 import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Button } from "../ui/Button";
 
 export function Hero() {
@@ -145,7 +146,9 @@ export function Hero() {
           className="flex flex-col sm:flex-row items-center gap-6"
         >
           <Button variant="cyber">Join The Grid</Button>
-          <Button variant="outline">News</Button>
+          <Link href="/news">
+            <Button variant="outline">News</Button>
+          </Link>
         </motion.div>
       </div>
     </section>
