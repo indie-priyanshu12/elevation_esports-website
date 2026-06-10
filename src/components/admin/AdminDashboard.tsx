@@ -117,7 +117,7 @@ export default function AdminDashboard({ initialNews, initialTournaments }: { in
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {news.map(n => (
                     <div key={n.slug} className="group border border-white/10 bg-void p-5 hover:border-neon-cyan/50 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                      <div className="absolute top-0 right-0 p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex gap-2">
                         <button onClick={() => setEditingNews(n)} className="bg-blue-500/20 text-blue-400 p-2 text-xs font-mono hover:bg-blue-500 hover:text-white">EDIT</button>
                         <button onClick={() => handleDeleteNews(n.slug)} className="bg-red-500/20 text-red-400 p-2 text-xs font-mono hover:bg-red-500 hover:text-white">DEL</button>
                       </div>
@@ -156,7 +156,7 @@ export default function AdminDashboard({ initialNews, initialTournaments }: { in
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {tournaments.map(t => (
                     <div key={t.slug} className="group border border-white/10 bg-void p-5 hover:border-neon-pink/50 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                      <div className="absolute top-0 right-0 p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex gap-2">
                         <button onClick={() => setEditingTournament(t)} className="bg-blue-500/20 text-blue-400 p-2 text-xs font-mono hover:bg-blue-500 hover:text-white">EDIT</button>
                         <button onClick={() => handleDeleteTournament(t.slug)} className="bg-red-500/20 text-red-400 p-2 text-xs font-mono hover:bg-red-500 hover:text-white">DEL</button>
                       </div>
