@@ -56,7 +56,10 @@ export function Footer() {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs font-sans font-bold text-ice/40 tracking-widest uppercase">
-          <p>&copy; {new Date().getFullYear()} Elevation Esports. System Online.</p>
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <p>&copy; {new Date().getFullYear()} Elevation Esports. System Online.</p>
+            <p className="text-ice/30">Developed by Priyanshu Kashyap aka <span className="text-neon-pink">LightningMcQueen</span></p>
+          </div>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-neon-cyan mr-2 animate-pulse" /> Network Stable</span>
           </div>

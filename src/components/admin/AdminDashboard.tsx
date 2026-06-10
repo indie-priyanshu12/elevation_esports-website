@@ -73,7 +73,7 @@ export default function AdminDashboard({ initialNews, initialTournaments }: { in
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-4 border-b border-white/10 pb-4">
+      <div className="flex items-center gap-4 border-b border-white/10 pb-4 overflow-x-auto whitespace-nowrap">
         <button
           onClick={() => { setActiveTab("news"); setIsCreating(false); setEditingNews(null); }}
           className={`px-6 py-2 font-display tracking-widest transition-all ${
@@ -93,7 +93,7 @@ export default function AdminDashboard({ initialNews, initialTournaments }: { in
       </div>
 
       {/* Content Area */}
-      <div className="bg-black/40 border border-white/5 p-6 min-h-[500px]">
+      <div className="bg-black/40 border border-white/5 p-4 sm:p-6 min-h-[500px]">
         {activeTab === "news" && (
           <>
             {isCreating || editingNews ? (
@@ -104,7 +104,7 @@ export default function AdminDashboard({ initialNews, initialTournaments }: { in
               />
             ) : (
               <div className="flex flex-col gap-6">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
                   <h2 className="text-2xl font-display text-ice">NEWS_DATABASE</h2>
                   <button 
                     onClick={() => setIsCreating(true)}
@@ -143,7 +143,7 @@ export default function AdminDashboard({ initialNews, initialTournaments }: { in
               />
             ) : (
               <div className="flex flex-col gap-6">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
                   <h2 className="text-2xl font-display text-ice">TOURNAMENTS_DATABASE</h2>
                   <button 
                     onClick={() => setIsCreating(true)}

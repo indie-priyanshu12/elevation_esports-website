@@ -89,7 +89,7 @@ export default function TournamentForm({ initialData, onSuccess, onCancel }: { i
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-6 border-b border-white/10 pb-4">
         <h2 className="text-2xl font-display text-ice">{initialData ? "EDIT_TOURNAMENT_RECORD" : "NEW_TOURNAMENT_RECORD"}</h2>
         <button onClick={onCancel} className="text-ice/50 hover:text-white font-mono text-sm uppercase">Cancel / Abort</button>
       </div>
@@ -244,11 +244,11 @@ export default function TournamentForm({ initialData, onSuccess, onCancel }: { i
           </label>
         </div>
 
-        <div className="pt-6 border-t border-white/10 flex justify-end gap-4">
-          <button type="button" onClick={onCancel} className="px-6 py-3 font-display tracking-widest text-ice/60 hover:text-white border border-transparent">
+        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-end gap-4">
+          <button type="button" onClick={onCancel} className="w-full sm:w-auto px-6 py-3 font-display tracking-widest text-ice/60 hover:text-white border border-transparent">
             CANCEL
           </button>
-          <button type="submit" disabled={isLoading} className="px-8 py-3 bg-neon-pink/20 border border-neon-pink text-neon-pink font-display tracking-widest hover:bg-neon-pink hover:text-void hover:shadow-[0_0_20px_rgba(255,0,127,0.4)] transition-all disabled:opacity-50">
+          <button type="submit" disabled={isLoading} className="w-full sm:w-auto px-8 py-3 bg-neon-pink/20 border border-neon-pink text-neon-pink font-display tracking-widest hover:bg-neon-pink hover:text-void hover:shadow-[0_0_20px_rgba(255,0,127,0.4)] transition-all disabled:opacity-50">
             {isLoading ? "UPLOADING..." : initialData ? "COMMIT CHANGES" : "PUBLISH TOURNAMENT"}
           </button>
         </div>
