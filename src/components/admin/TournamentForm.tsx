@@ -51,10 +51,22 @@ export default function TournamentForm({ initialData, onSuccess, onCancel }: { i
       const url = initialData ? `/api/tournaments/${initialData.slug}` : `/api/tournaments`;
       const method = initialData ? "PATCH" : "POST";
       
-      const payload = { ...formData };
-      if (payload.uploaded_at) payload.uploaded_at = new Date(payload.uploaded_at).toISOString();
-      if (payload.event_date) payload.event_date = new Date(payload.event_date).toISOString();
-      if (payload.registration_closes_at) payload.registration_closes_at = new Date(payload.registration_closes_at).toISOString();
+      const payload = {
+        name: formData.name,
+        slug: formData.slug,
+        game: formData.game,
+        summary: formData.summary,
+        format: formData.format,
+        status: formData.status,
+        formLink: formData.form_url,
+        detailLink: formData.detail_url,
+        dateUploaded: formData.uploaded_at ? new Date(formData.uploaded_at).toISOString() : new Date().toISOString(),
+        eventDate: formData.event_date ? new Date(formData.event_date).toISOString() : "",
+        registrationClosesAt: formData.registration_closes_at ? new Date(formData.registration_closes_at).toISOString() : null,
+        slots: formData.slots_info,
+        location: formData.location_label,
+        archived: formData.is_archived
+      };
 
       const res = await fetch(url, {
         method,
