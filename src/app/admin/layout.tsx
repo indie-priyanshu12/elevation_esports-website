@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
+import { logoutAction } from "./actions";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -42,7 +43,7 @@ export default async function AdminLayout({
         </div>
         <div className="flex items-center gap-4">
           <span className="font-mono text-xs text-neon-pink bg-neon-pink/10 px-2 py-1 rounded border border-neon-pink/30">SYS_ONLINE</span>
-          <form action="/api/admin/logout" method="POST" className="inline">
+          <form action={logoutAction} className="inline">
             <button type="submit" className="text-sm text-ice/70 hover:text-white transition-colors">Logout</button>
           </form>
         </div>
