@@ -52,6 +52,7 @@ export function Hero() {
                 src="/logo/EE_logo.webp"
                 alt="Elevation Esports logo"
                 fill
+                sizes="112px"
                 className="object-contain drop-shadow-[0_0_30px_rgba(255,255,255,1)]"
               />
             </div>

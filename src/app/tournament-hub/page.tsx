@@ -3,6 +3,7 @@ import Link from "next/link";
 import { GameSelection } from "@/components/tournament/GameSelection";
 import { TournamentTabs } from "@/components/tournament/TournamentTabs";
 import { getTournamentHubData } from "@/lib/tournaments/service";
+import { DiscordPopup } from "@/components/ui/DiscordPopup";
 
 export const metadata: Metadata = {
   title: "Tournament Hub",
@@ -52,6 +53,8 @@ export default async function TournamentHubPage() {
           completedTournaments={tournamentHubData.completed}
         />
       </section>
+
+      <DiscordPopup />
     </main>
   );
 }

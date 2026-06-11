@@ -4,9 +4,11 @@ import { useState } from "react";
 import NewsForm from "./NewsForm";
 import TournamentForm from "./TournamentForm";
 
-type Tab = "news" | "tournaments";
+import HomepageManager from "./HomepageManager";
 
-export default function AdminDashboard({ initialNews, initialTournaments }: { initialNews: any[], initialTournaments: any[] }) {
+type Tab = "news" | "tournaments" | "homepage";
+
+export default function AdminDashboard({ initialNews, initialTournaments, initialHomeData }: { initialNews: any[], initialTournaments: any[], initialHomeData?: any }) {
   const [activeTab, setActiveTab] = useState<Tab>("news");
   const [news, setNews] = useState(initialNews);
   const [tournaments, setTournaments] = useState(initialTournaments);
@@ -90,10 +92,22 @@ export default function AdminDashboard({ initialNews, initialTournaments }: { in
         >
           MANAGE TOURNAMENTS
         </button>
+        <button
+          onClick={() => { setActiveTab("homepage"); setIsCreating(false); setEditingTournament(null); setEditingNews(null); }}
+          className={`px-6 py-2 font-display tracking-widest transition-all ${
+            activeTab === "homepage" ? "text-neon-yellow border-b-2 border-neon-yellow" : "text-ice/50 hover:text-ice"
+          }`}
+        >
+          MANAGE HOMEPAGE
+        </button>
       </div>
 
       {/* Content Area */}
       <div className="bg-black/40 border border-white/5 p-4 sm:p-6 min-h-[500px]">
+        {activeTab === "homepage" && initialHomeData && (
+          <HomepageManager initialData={initialHomeData} />
+        )}
+
         {activeTab === "news" && (
           <>
             {isCreating || editingNews ? (

@@ -2,6 +2,8 @@ import { connectToDatabase } from "@/lib/db/mongoose";
 import { NewsPost, TournamentModel } from "@/lib/db/models";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 
+import { getHomeData } from "@/lib/home/service";
+
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
@@ -40,5 +42,7 @@ export default async function AdminPage() {
     is_archived: t.is_archived,
   }));
 
-  return <AdminDashboard initialNews={news} initialTournaments={tournaments} />;
+  const homeData = await getHomeData();
+
+  return <AdminDashboard initialNews={news} initialTournaments={tournaments} initialHomeData={homeData} />;
 }

@@ -2,34 +2,14 @@
 
 import { motion } from "framer-motion";
 
-const achievements = [
-  {
-    icon: "🏆",
-    value: "50+",
-    label: "Tournaments Hosted",
-    color: "text-neon-yellow",
-  },
-  {
-    icon: "👥",
-    value: "2,000+",
-    label: "Participants",
-    color: "text-neon-cyan",
-  },
-  {
-    icon: "🎮",
-    value: "8",
-    label: "Supported Games",
-    color: "text-neon-green",
-  },
-  {
-    icon: "💰",
-    value: "₹1,00,000+",
-    label: "Prize Pool Distributed",
-    color: "text-neon-pink",
-  },
-];
+export interface AchievementData {
+  icon: string;
+  value: string;
+  label: string;
+  color: string;
+}
 
-export function Achievements() {
+export function Achievements({ achievements }: { achievements: AchievementData[] }) {
   return (
     <section className="py-24 relative overflow-hidden bg-void border-y border-white/5">
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-void via-[#1a0b2e]/30 to-void" />
@@ -56,9 +36,11 @@ export function Achievements() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {achievements.map((item, index) => (
+          {(achievements || []).map((item, index) => {
+            if (!item) return null;
+            return (
             <motion.div
-              key={index}
+              key={`achievement-${index}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -78,7 +60,8 @@ export function Achievements() {
                 {item.label}
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

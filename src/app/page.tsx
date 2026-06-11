@@ -7,15 +7,19 @@ import { Sponsors } from "@/components/sections/Sponsors";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 
-export default function Home() {
+import { getHomeData } from "@/lib/home/service";
+
+export default async function Home() {
+  const { achievements, stats, teams, sponsors } = await getHomeData();
+
   return (
     <main className="min-h-screen bg-obsidian">
       <Navbar />
       <Hero />
-      <About />
-      <Achievements />
-      <Teams />
-      <Sponsors />
+      <About stats={stats} />
+      <Achievements achievements={achievements} />
+      <Teams teams={teams} />
+      <Sponsors sponsors={sponsors} />
       <Contact />
       <Footer />
     </main>

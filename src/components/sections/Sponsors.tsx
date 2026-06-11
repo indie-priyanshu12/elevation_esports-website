@@ -5,9 +5,12 @@ import { SectionHeader } from "../ui/SectionHeader";
 import { motion } from "framer-motion";
 import { Button } from "../ui/Button";
 
-export function Sponsors() {
-  const sponsors = [1, 2, 3, 4];
+export interface SponsorData {
+  name: string;
+  logoUrl?: string;
+}
 
+export function Sponsors({ sponsors }: { sponsors: SponsorData[] }) {
   return (
     <section id="sponsors" className="py-32 relative border-y border-cyber-purple/20 bg-void overflow-hidden">
       {/* Animated scanlines across background */}
@@ -21,25 +24,28 @@ export function Sponsors() {
         <SectionHeader title="Network Nodes" subtitle="The corporate entities powering our ascent to the top." />
 
         <div className="flex flex-wrap justify-center gap-8 md:gap-16 mt-20 mb-20">
-          {sponsors.map((i) => (
+          {(sponsors || []).map((sponsor, index) => {
+            if (!sponsor) return null;
+            return (
             <motion.div
-              key={i}
+              key={`sponsor-${index}`}
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               className="relative group"
             >
               {/* Cyberpunk Skewed Box */}
               <div className="w-32 h-24 md:w-48 md:h-32 bg-glass backdrop-blur border border-cyber-purple/50 flex items-center justify-center transform -skew-x-12 transition-all duration-300 group-hover:border-neon-cyan group-hover:shadow-neon-cyan overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-tr from-neon-cyan/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="transform skew-x-12 font-display text-white/50 group-hover:text-neon-cyan font-bold transition-colors duration-300 text-lg md:text-xl tracking-cyber">
-                  SYS_{i}
+                  {sponsor.name}
                 </div>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
 
         <motion.div

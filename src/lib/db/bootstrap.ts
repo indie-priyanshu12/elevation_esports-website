@@ -6,6 +6,8 @@ declare global {
   var __elevationBootstrapPromise: Promise<void> | undefined;
 }
 
+import { seedHomeData } from "@/lib/home/service";
+
 async function bootstrapDatabase() {
   await connectToDatabase();
 
@@ -15,6 +17,8 @@ async function bootstrapDatabase() {
       await seedTournament(tournament);
     }
   }
+
+  await seedHomeData();
 }
 
 export async function ensureDatabaseReady() {

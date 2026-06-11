@@ -4,7 +4,13 @@ import React from "react";
 import { SectionHeader } from "../ui/SectionHeader";
 import { AnimatedCounter } from "../ui/AnimatedCounter";
 
-export function About() {
+export interface StatData {
+  value: number;
+  label: string;
+  suffix?: string;
+}
+
+export function About({ stats }: { stats: StatData[] }) {
   return (
     <section id="about" className="py-32 relative overflow-hidden">
       {/* Background diagonal slash */}
@@ -17,10 +23,12 @@ export function About() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-          <AnimatedCounter value={450} label="Active Operators" suffix="+" />
-          <AnimatedCounter value={24} label="Circuits Hosted" />
-          <AnimatedCounter value={12} label="Trophies Secured" />
-          <AnimatedCounter value={5} label="Elite Squadrons" />
+          {(stats || []).map((stat, idx) => {
+            if (!stat) return null;
+            return (
+            <AnimatedCounter key={idx} value={stat.value || 0} label={stat.label || ""} suffix={stat.suffix || ""} />
+            );
+          })}
         </div>
       </div>
     </section>

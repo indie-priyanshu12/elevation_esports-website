@@ -30,12 +30,20 @@
 }
 
 @keyframes scanline-sweep {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes scanline-glitch {
+  0%, 10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%, 100% { opacity: 0.4; }
+  21% { opacity: 0.9; }
+  22% { opacity: 0.1; }
+  23% { opacity: 0.8; }
+  51% { opacity: 0.1; }
+  52% { opacity: 1; }
+  53% { opacity: 0.2; }
+  76% { opacity: 0.9; }
+  77% { opacity: 0.1; }
 }
 
 .animate-grid-drift {
@@ -43,7 +51,7 @@
 }
 
 .animate-scanline-sweep {
-  animation: scanline-sweep 8s linear infinite;
+  animation: scanline-sweep 8s linear infinite, scanline-glitch 4s linear infinite;
 }
 
 :root {
