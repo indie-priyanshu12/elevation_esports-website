@@ -13,7 +13,12 @@ export function Navbar() {
           <li><Link href="/news" className="text-ice hover:text-neon-cyan transition">News</Link></li>
           {/* other nav items can be added here */}
         </ul>
-        <Button variant="cyber">Login</Button>
+        <div className="flex items-center gap-4">
+          <a href="https://discord.gg/" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:text-white text-sm font-mono tracking-wider transition-colors animate-pulse">
+            [ Join Discord to stay updated ]
+          </a>
+          <Button variant="cyber">Login</Button>
+        </div>
       </div>
     </nav>
   );

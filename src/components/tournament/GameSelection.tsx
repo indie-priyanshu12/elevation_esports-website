@@ -1,5 +1,4 @@
 "use client";
-import { motion } from "framer-motion";
 import { GameCard } from "./GameCard";
 
 const games = [
@@ -15,12 +14,9 @@ const games = [
 
 export function GameSelection({ onSelect }: { onSelect?: (gameId: string) => void }) {
   return (
-    <motion.div
+    <div
       className="grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:grid-rows-2"
       style={{ minHeight: "22rem" }}
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
     >
       {games.map((g) => (
         <GameCard
@@ -30,6 +26,6 @@ export function GameSelection({ onSelect }: { onSelect?: (gameId: string) => voi
           onSelect={() => onSelect?.(g.id)}
         />
       ))}
-    </motion.div>
+    </div>
   );
 }

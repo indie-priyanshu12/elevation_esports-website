@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
 import type { TournamentRecord } from "@/lib/tournaments/types";
@@ -28,8 +29,11 @@ function TournamentList({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: index * 0.08 }}
+          whileHover={{ scale: 1.01, translateY: -2 }}
+          className="group relative"
         >
-          <Card>
+          <div className="absolute inset-0 bg-gradient-to-br from-neon-pink/10 to-neon-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-md" />
+          <Card className="relative bg-black/40 backdrop-blur-md border border-white/10 group-hover:border-white/20 group-hover:shadow-[0_0_20px_rgba(255,0,127,0.1)] transition-all duration-300">
             <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center gap-3">
@@ -59,19 +63,19 @@ function TournamentList({
                 >
                   {archived ? "Archive Link" : "Form Link"}
                 </a>
-                <a
-                  href={item.detailLink}
+                <Link
+                  href={`/tournament-hub/${item.slug}/details`}
                   className="inline-flex h-11 items-center justify-center border-2 border-neon-pink bg-transparent px-5 font-display text-sm font-bold uppercase tracking-cyber text-neon-pink shadow-[0_0_10px_rgba(255,0,127,0.3)_inset,0_0_10px_rgba(255,0,127,0.3)] transition hover:bg-neon-pink hover:text-void hover:shadow-neon-pink"
                 >
                   Details
-                </a>
+                </Link>
               </div>
             </CardHeader>
 
-            <CardContent className="grid gap-4 md:grid-cols-5">
+            <CardContent className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
               <div>
                 <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-cyber-purple">
-                  Date Uploaded
+                  Date
                 </p>
                 <p className="font-sans text-sm text-ice">{formatDisplayDate(item.dateUploaded)}</p>
               </div>
@@ -80,6 +84,18 @@ function TournamentList({
                   Format
                 </p>
                 <p className="font-sans text-sm text-ice">{item.format}</p>
+              </div>
+              <div>
+                <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-neon-pink">
+                  Prize Pool
+                </p>
+                <p className="font-sans text-sm text-ice">{item.prizePool || "TBD"}</p>
+              </div>
+              <div>
+                <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-neon-cyan">
+                  Entry Fee
+                </p>
+                <p className="font-sans text-sm text-ice">{item.entryFee || "Free"}</p>
               </div>
               <div>
                 <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-cyber-purple">
@@ -97,16 +113,6 @@ function TournamentList({
                     : archived
                       ? "Closed"
                       : "See details"}
-                </p>
-              </div>
-              <div>
-                <p className="mb-1 font-display text-xs font-bold uppercase tracking-cyber text-cyber-purple">
-                  Recommended Note
-                </p>
-                <p className="font-sans text-sm text-ice/75">
-                  {archived
-                    ? "Keep result sheets, MVP notes, and stream links together for quick recap access."
-                    : "Include roster lock timing, Discord check-in, and rulebook access in the detail page."}
                 </p>
               </div>
             </CardContent>

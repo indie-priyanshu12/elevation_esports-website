@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 
 const GAME_TITLES = ["Valorant", "BGMI", "Free Fire", "CS2", "Rocket League", "Other"];
-const STATUS_LABELS = ["Registration Open", "Ongoing", "Completed", "Upcoming"];
+const STATUS_LABELS = ["🟢 Live Now", "🟡 Registration Open", "🔴 Registration Closed"];
 
 export default function TournamentForm({ initialData, onSuccess, onCancel }: { initialData?: any, onSuccess: () => void, onCancel: () => void }) {
   const [formData, setFormData] = useState({
@@ -12,11 +12,12 @@ export default function TournamentForm({ initialData, onSuccess, onCancel }: { i
     game: initialData?.game || "Valorant",
     summary: initialData?.summary || "",
     format: initialData?.format || "5v5 Single Elimination",
-    status: initialData?.status || "Registration Open",
+    status: initialData?.status || "🟡 Registration Open",
     slots_info: initialData?.slots_info || "0/32 Teams",
     location_label: initialData?.location_label || "Online / Discord",
-    form_url: initialData?.form_url || "",
-    detail_url: initialData?.detail_url || "",
+    form_url: initialData?.formLink || initialData?.form_url || "",
+    prizePool: initialData?.prizePool || "",
+    entryFee: initialData?.entryFee || "",
     uploaded_at: initialData?.uploaded_at ? new Date(initialData.uploaded_at).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16),
     event_date: initialData?.event_date ? new Date(initialData.event_date).toISOString().slice(0, 16) : "",
     registration_closes_at: initialData?.registration_closes_at ? new Date(initialData.registration_closes_at).toISOString().slice(0, 16) : "",
@@ -59,7 +60,8 @@ export default function TournamentForm({ initialData, onSuccess, onCancel }: { i
         format: formData.format,
         status: formData.status,
         formLink: formData.form_url,
-        detailLink: formData.detail_url,
+        prizePool: formData.prizePool,
+        entryFee: formData.entryFee,
         dateUploaded: formData.uploaded_at ? new Date(formData.uploaded_at).toISOString() : new Date().toISOString(),
         eventDate: formData.event_date ? new Date(formData.event_date).toISOString() : "",
         registrationClosesAt: formData.registration_closes_at ? new Date(formData.registration_closes_at).toISOString() : null,
@@ -200,23 +202,35 @@ export default function TournamentForm({ initialData, onSuccess, onCancel }: { i
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono text-neon-pink uppercase tracking-widest">Registration Form URL</label>
+            <label className="text-xs font-mono text-neon-pink uppercase tracking-widest">Prize Pool</label>
             <input 
-              type="url" 
-              value={formData.form_url} 
-              onChange={e => setFormData({ ...formData, form_url: e.target.value })}
+              type="text" 
+              value={formData.prizePool} 
+              onChange={e => setFormData({ ...formData, prizePool: e.target.value })}
+              placeholder="e.g. ₹50,000"
               className="bg-black/50 border border-white/10 p-3 text-ice font-mono text-sm focus:outline-none focus:border-neon-pink transition-colors"
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono text-neon-pink uppercase tracking-widest">Tournament Bracket/Details URL</label>
+            <label className="text-xs font-mono text-neon-pink uppercase tracking-widest">Entry Fee</label>
             <input 
-              type="url" 
-              value={formData.detail_url} 
-              onChange={e => setFormData({ ...formData, detail_url: e.target.value })}
+              type="text" 
+              value={formData.entryFee} 
+              onChange={e => setFormData({ ...formData, entryFee: e.target.value })}
+              placeholder="e.g. Free or ₹500/Team"
               className="bg-black/50 border border-white/10 p-3 text-ice font-mono text-sm focus:outline-none focus:border-neon-pink transition-colors"
             />
           </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-xs font-mono text-neon-pink uppercase tracking-widest">Registration Form URL</label>
+          <input 
+            type="url" 
+            value={formData.form_url} 
+            onChange={e => setFormData({ ...formData, form_url: e.target.value })}
+            className="bg-black/50 border border-white/10 p-3 text-ice font-mono text-sm focus:outline-none focus:border-neon-pink transition-colors"
+          />
         </div>
 
         <div className="flex flex-col gap-2">

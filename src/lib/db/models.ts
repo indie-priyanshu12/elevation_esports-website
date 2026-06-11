@@ -56,7 +56,8 @@ export interface ITournament extends Document {
   game: string;
   summary?: string;
   form_url: string;
-  detail_url: string;
+  prize_pool?: string;
+  entry_fee?: string;
   uploaded_at: Date;
   event_date: Date;
   registration_closes_at?: Date;
@@ -76,7 +77,8 @@ const TournamentSchema = new Schema<ITournament>(
     game: { type: String, required: true },
     summary: { type: String },
     form_url: { type: String, required: true },
-    detail_url: { type: String, required: true },
+    prize_pool: { type: String },
+    entry_fee: { type: String },
     uploaded_at: { type: Date, required: true },
     event_date: { type: Date, required: true },
     registration_closes_at: { type: Date },

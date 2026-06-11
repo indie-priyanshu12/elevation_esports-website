@@ -5,7 +5,8 @@ export type TournamentRecord = {
   game: string;
   summary: string | null;
   formLink: string;
-  detailLink: string;
+  prizePool: string | null;
+  entryFee: string | null;
   dateUploaded: string;
   eventDate: string;
   registrationClosesAt: string | null;
@@ -22,7 +23,8 @@ export type TournamentMutationInput = {
   game: string;
   summary?: string | null;
   formLink: string;
-  detailLink: string;
+  prizePool?: string | null;
+  entryFee?: string | null;
   dateUploaded: string;
   eventDate: string;
   registrationClosesAt?: string | null;
