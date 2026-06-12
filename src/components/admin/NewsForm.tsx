@@ -15,16 +15,17 @@ export default function NewsForm({ initialData, onSuccess, onCancel }: { initial
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isSlugDirty, setIsSlugDirty] = useState(false);
 
   // Auto-generate slug from title if creating new
   useEffect(() => {
-    if (!initialData && formData.title && !formData.slug) {
+    if (!initialData && !isSlugDirty) {
       setFormData(prev => ({
         ...prev,
         slug: formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
       }));
     }
-  }, [formData.title, initialData, formData.slug]);
+  }, [formData.title, initialData, isSlugDirty]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +99,10 @@ export default function NewsForm({ initialData, onSuccess, onCancel }: { initial
             <input 
               type="text" 
               value={formData.slug} 
-              onChange={e => setFormData({ ...formData, slug: e.target.value })}
+              onChange={e => {
+                setFormData({ ...formData, slug: e.target.value });
+                setIsSlugDirty(true);
+              }}
               className="bg-black/50 border border-white/10 p-3 text-ice font-mono text-sm focus:outline-none focus:border-neon-cyan transition-colors"
               required
             />

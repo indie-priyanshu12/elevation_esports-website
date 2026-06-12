@@ -38,7 +38,7 @@ export default async function AdminLayout({
     <div className={`min-h-screen bg-void text-ice flex flex-col ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans`}>
       <header className="border-b border-neon-cyan/20 bg-black/40 backdrop-blur-md p-4 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-4">
-          <img src="/favicon.ico" alt="Elevation Esports" className="h-8 w-auto object-contain" />
+          <img src="/favicon.ico" alt="Elevation Esports" className="h-16 w-auto object-contain" />
           <h1 className="text-xl font-display text-neon-cyan tracking-wider">ADMIN_PORTAL</h1>
         </div>
         <div className="flex items-center gap-4">

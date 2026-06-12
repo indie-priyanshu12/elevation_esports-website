@@ -15,7 +15,7 @@ function mapToRecord(doc: INewsPost): NewsRecord {
 }
 
 export async function listNews(): Promise<NewsRecord[]> {
-  const items = await NewsPost.find().sort({ published_at: -1 }).exec();
+  const items = await NewsPost.find({ is_published: true }).sort({ published_at: -1 }).exec();
   return items.map(mapToRecord);
 }
 
