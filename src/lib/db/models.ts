@@ -92,3 +92,22 @@ const TournamentSchema = new Schema<ITournament>(
 );
 
 export const TournamentModel = mongoose.models.Tournament || mongoose.model<ITournament>("Tournament", TournamentSchema);
+
+export interface IUplinkMessage extends Document {
+  name: string;
+  email: string;
+  message: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+const UplinkMessageSchema = new Schema<IUplinkMessage>(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    message: { type: String, required: true },
+  },
+  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+);
+
+export const UplinkMessage = mongoose.models.UplinkMessage || mongoose.model<IUplinkMessage>("UplinkMessage", UplinkMessageSchema);

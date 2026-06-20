@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/lib/db/mongoose";
-import { NewsPost, TournamentModel } from "@/lib/db/models";
+import { NewsPost, TournamentModel, UplinkMessage } from "@/lib/db/models";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 
 import { getHomeData } from "@/lib/home/service";
@@ -11,6 +11,7 @@ export default async function AdminPage() {
 
   const rawNews = await NewsPost.find({}).sort({ created_at: -1 }).lean();
   const rawTournaments = await TournamentModel.find({}).sort({ uploaded_at: -1 }).lean();
+  const rawUplinks = await UplinkMessage.find({}).sort({ created_at: -1 }).lean();
 
   const news = rawNews.map((n: any) => ({
     _id: n._id.toString(),
@@ -42,7 +43,15 @@ export default async function AdminPage() {
     is_archived: t.is_archived,
   }));
 
+  const uplinks = rawUplinks.map((u: any) => ({
+    _id: u._id.toString(),
+    name: u.name,
+    email: u.email,
+    message: u.message,
+    created_at: u.created_at.toISOString(),
+  }));
+
   const homeData = await getHomeData();
 
-  return <AdminDashboard initialNews={news} initialTournaments={tournaments} initialHomeData={homeData} />;
+  return <AdminDashboard initialNews={news} initialTournaments={tournaments} initialHomeData={homeData} initialUplinks={uplinks} />;
 }

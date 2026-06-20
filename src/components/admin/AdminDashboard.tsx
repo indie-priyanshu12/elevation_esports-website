@@ -6,12 +6,13 @@ import TournamentForm from "./TournamentForm";
 
 import HomepageManager from "./HomepageManager";
 
-type Tab = "news" | "tournaments" | "homepage";
+type Tab = "news" | "tournaments" | "homepage" | "uplink";
 
-export default function AdminDashboard({ initialNews, initialTournaments, initialHomeData }: { initialNews: any[], initialTournaments: any[], initialHomeData?: any }) {
+export default function AdminDashboard({ initialNews, initialTournaments, initialHomeData, initialUplinks = [] }: { initialNews: any[], initialTournaments: any[], initialHomeData?: any, initialUplinks?: any[] }) {
   const [activeTab, setActiveTab] = useState<Tab>("news");
   const [news, setNews] = useState(initialNews);
   const [tournaments, setTournaments] = useState(initialTournaments);
+  const [uplinks, setUplinks] = useState(initialUplinks);
   
   const [editingNews, setEditingNews] = useState<any | null>(null);
   const [editingTournament, setEditingTournament] = useState<any | null>(null);
@@ -23,6 +24,7 @@ export default function AdminDashboard({ initialNews, initialTournaments, initia
     publishedNews: news.filter(n => n.is_published).length,
     totalTournaments: tournaments.length,
     activeTournaments: tournaments.filter(t => !t.is_archived).length,
+    totalUplinks: uplinks.length,
   };
 
   const handleNewsSubmit = () => {
@@ -54,6 +56,16 @@ export default function AdminDashboard({ initialNews, initialTournaments, initia
       if (res.ok) setTournaments(tournaments.filter(t => t.slug !== slug));
     } catch (e) {
       alert("Failed to delete tournament.");
+    }
+  };
+
+  const handleDeleteUplink = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this uplink message?")) return;
+    try {
+      const res = await fetch(`/api/uplink?id=${id}`, { method: "DELETE" });
+      if (res.ok) setUplinks(uplinks.filter(u => u._id !== id));
+    } catch (e) {
+      alert("Failed to delete uplink message.");
     }
   };
 
@@ -99,6 +111,14 @@ export default function AdminDashboard({ initialNews, initialTournaments, initia
           }`}
         >
           MANAGE HOMEPAGE
+        </button>
+        <button
+          onClick={() => { setActiveTab("uplink"); setIsCreating(false); setEditingTournament(null); setEditingNews(null); }}
+          className={`px-6 py-2 font-display tracking-widest transition-all ${
+            activeTab === "uplink" ? "text-cyber-purple border-b-2 border-cyber-purple" : "text-ice/50 hover:text-ice"
+          }`}
+        >
+          MANAGE UPLINK
         </button>
       </div>
 
@@ -187,6 +207,26 @@ export default function AdminDashboard({ initialNews, initialTournaments, initia
               </div>
             )}
           </>
+        )}
+
+        {activeTab === "uplink" && (
+          <div className="flex flex-col gap-6">
+            <h2 className="text-2xl font-display text-ice">UPLINK_MESSAGES</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {uplinks.map(u => (
+                <div key={u._id} className="group border border-white/10 bg-void p-5 hover:border-cyber-purple/50 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => handleDeleteUplink(u._id)} className="bg-red-500/20 text-red-400 p-2 text-xs font-mono hover:bg-red-500 hover:text-white">DEL</button>
+                  </div>
+                  <h3 className="font-display text-lg text-ice mb-1 truncate">{u.name}</h3>
+                  <p className="text-xs font-mono text-neon-cyan mb-2 truncate">{u.email}</p>
+                  <p className="text-sm text-ice/80 whitespace-pre-wrap">{u.message}</p>
+                  <div className="mt-4 text-xs font-mono text-ice/40">{new Date(u.created_at).toLocaleString()}</div>
+                </div>
+              ))}
+              {uplinks.length === 0 && <p className="text-ice/40 font-mono">No uplink messages received.</p>}
+            </div>
+          </div>
         )}
       </div>
     </div>

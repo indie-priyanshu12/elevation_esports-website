@@ -36,6 +36,7 @@ export default function HomepageManager({ initialData }: { initialData: any }) {
   };
 
   const removeItem = (list: any[], setList: any, index: number) => {
+    if (!confirm("Are you sure you want to delete this item?")) return;
     const newList = [...list];
     newList.splice(index, 1);
     setList(newList);

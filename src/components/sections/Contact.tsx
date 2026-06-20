@@ -8,6 +8,30 @@ import { motion } from "framer-motion";
 import { Mail, MapPin } from "lucide-react";
 
 export function Contact() {
+  const [formData, setFormData] = React.useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/uplink", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setStatus("idle"), 3000);
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      setStatus("error");
+    }
+  };
+
   return (
     <section id="contact" className="py-32 relative overflow-hidden">
       {/* Glitch node background */}
@@ -30,11 +54,40 @@ export function Contact() {
                 <span className="w-2 h-2 bg-neon-pink mr-3 animate-pulse" />
                 Initialize Uplink
               </h3>
-              <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-                <Input label="Callsign (Name)" id="name" placeholder="Ghost" />
-                <Input label="Network Node (Email)" id="email" type="email" placeholder="ghost@network.edu" />
-                <Input label="Transmission Data" id="message" placeholder="Awaiting input..." />
-                <Button variant="cyber" className="w-full mt-4">Transmit Data</Button>
+              <form className="space-y-8" onSubmit={handleSubmit}>
+                <Input 
+                  label="Callsign (Name)" 
+                  id="name" 
+                  placeholder="Ghost" 
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                />
+                <Input 
+                  label="Network Node (Email)" 
+                  id="email" 
+                  type="email" 
+                  placeholder="ghost@network.edu" 
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  required
+                />
+                <Input 
+                  label="Transmission Data" 
+                  id="message" 
+                  placeholder="Awaiting input..." 
+                  value={formData.message}
+                  onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                  required
+                />
+                <Button 
+                  variant="cyber" 
+                  className="w-full mt-4"
+                  disabled={status === "loading"}
+                >
+                  {status === "loading" ? "Transmitting..." : status === "success" ? "Data Received" : "Transmit Data"}
+                </Button>
+                {status === "error" && <p className="text-red-500 text-sm mt-2 font-mono">Transmission failed. Retry.</p>}
               </form>
             </div>
           </motion.div>
