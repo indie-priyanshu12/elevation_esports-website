@@ -29,8 +29,10 @@ export function NewsFeed({ items, source }: { items: NewsRecord[], source: "data
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {items.map((news) => (
-          <div 
+          <motion.div 
             key={news.id} 
+            whileHover={{ scale: 1.02, y: -5 }}
+            whileTap={{ scale: 0.95 }}
             className="group relative bg-void/60 border border-white/10 rounded-xl overflow-hidden backdrop-blur-sm hover:border-cyber-purple/50 transition-all duration-300 flex flex-col cursor-pointer"
             onClick={() => setSelectedNews(news)}
           >
@@ -58,7 +60,7 @@ export function NewsFeed({ items, source }: { items: NewsRecord[], source: "data
                 </span>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 

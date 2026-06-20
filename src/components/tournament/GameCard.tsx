@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface GameCardProps {
   name: string;
@@ -9,7 +10,8 @@ interface GameCardProps {
 
 export function GameCard({ name, logoSrc, onSelect }: GameCardProps) {
   return (
-    <button
+    <motion.button
+      whileTap={{ scale: 0.95 }}
       onClick={onSelect}
       className="relative flex flex-col items-center justify-center gap-3 rounded-3xl p-4 w-full h-full overflow-hidden border border-neon-cyan/20 hover:border-neon-cyan/60 hover:shadow-[0_0_20px_rgba(0,255,255,0.15)] transition-all duration-300 group"
       style={{
@@ -41,6 +43,6 @@ export function GameCard({ name, logoSrc, onSelect }: GameCardProps) {
       <span className="text-lg font-bold text-neon-cyan uppercase tracking-wider text-center leading-tight group-hover:text-neon-pink transition-colors">
         {name}
       </span>
-    </button>
+    </motion.button>
   );
 }

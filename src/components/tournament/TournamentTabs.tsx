@@ -30,6 +30,7 @@ function TournamentList({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: index * 0.08 }}
           whileHover={{ scale: 1.01, translateY: -2 }}
+          whileTap={{ scale: 0.95 }}
           className="group relative"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-neon-pink/10 to-neon-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-md" />
