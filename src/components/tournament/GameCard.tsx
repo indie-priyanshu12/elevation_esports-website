@@ -13,7 +13,7 @@ export function GameCard({ name, logoSrc, onSelect }: GameCardProps) {
     <motion.button
       whileTap={{ scale: 0.95 }}
       onClick={onSelect}
-      className="relative flex flex-col items-center justify-center gap-3 rounded-3xl p-4 w-full h-full overflow-hidden border border-neon-cyan/20 hover:border-neon-cyan/60 hover:shadow-[0_0_20px_rgba(0,255,255,0.15)] transition-all duration-300 group"
+      className="relative flex flex-col items-center justify-center gap-1 md:gap-3 rounded-2xl md:rounded-3xl p-2 md:p-4 w-full h-full overflow-hidden border border-neon-cyan/20 hover:border-neon-cyan/60 hover:shadow-[0_0_20px_rgba(0,255,255,0.15)] transition-all duration-300 group"
       style={{
         background:
           "linear-gradient(135deg, rgba(0,255,255,0.05) 0%, rgba(15,5,30,0.8) 50%, rgba(255,0,200,0.05) 100%)",
@@ -21,15 +21,13 @@ export function GameCard({ name, logoSrc, onSelect }: GameCardProps) {
     >
       {/* Subtle inner glow panel behind logo — rounded-full to avoid boxy look */}
       <div
-        className="relative flex items-center justify-center rounded-full"
+        className="relative flex items-center justify-center rounded-full w-12 h-12 md:w-40 md:h-40"
         style={{
-          width: "10rem",
-          height: "10rem",
           background:
             "radial-gradient(circle, rgba(0,255,255,0.15) 0%, transparent 70%)",
         }}
       >
-        <div className="relative w-24 h-24">
+        <div className="relative w-8 h-8 md:w-24 md:h-24">
           <Image
             src={logoSrc}
             alt={name + " logo"}
@@ -40,7 +38,7 @@ export function GameCard({ name, logoSrc, onSelect }: GameCardProps) {
       </div>
 
       {/* Game name */}
-      <span className="text-lg font-bold text-neon-cyan uppercase tracking-wider text-center leading-tight group-hover:text-neon-pink transition-colors">
+      <span className="text-[10px] md:text-lg font-bold text-neon-cyan uppercase tracking-wider text-center leading-tight group-hover:text-neon-pink transition-colors px-1">
         {name}
       </span>
     </motion.button>

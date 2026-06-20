@@ -15,8 +15,7 @@ const games = [
 export function GameSelection({ onSelect }: { onSelect?: (gameId: string) => void }) {
   return (
     <div
-      className="grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:grid-rows-2"
-      style={{ minHeight: "22rem" }}
+      className="grid w-full grid-cols-4 grid-rows-2 gap-2 md:gap-4 min-h-[12rem] md:min-h-[22rem]"
     >
       {games.map((g) => (
         <GameCard
