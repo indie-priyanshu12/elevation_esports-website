@@ -41,3 +41,25 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
+export async function PATCH(request: Request) {
+  try {
+    await connectToDatabase();
+    const body = await request.json();
+    const { id, is_read } = body;
+
+    if (!id || typeof is_read !== "boolean") {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    const updated = await UplinkMessage.findByIdAndUpdate(id, { is_read }, { new: true });
+    if (!updated) {
+      return NextResponse.json({ error: "Message not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(updated);
+  } catch (error: any) {
+    console.error("Error updating uplink message:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}

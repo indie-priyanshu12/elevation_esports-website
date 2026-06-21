@@ -48,6 +48,7 @@ export default async function AdminPage() {
     name: u.name,
     email: u.email,
     message: u.message,
+    is_read: u.is_read || false,
     created_at: u.created_at.toISOString(),
   }));
 

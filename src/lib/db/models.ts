@@ -97,6 +97,7 @@ export interface IUplinkMessage extends Document {
   name: string;
   email: string;
   message: string;
+  is_read: boolean;
   created_at: Date;
   updated_at: Date;
 }
@@ -106,6 +107,7 @@ const UplinkMessageSchema = new Schema<IUplinkMessage>(
     name: { type: String, required: true },
     email: { type: String, required: true },
     message: { type: String, required: true },
+    is_read: { type: Boolean, default: false },
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
