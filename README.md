@@ -10,6 +10,8 @@ This project is a cyberpunk-styled frontend with animated sections, glowing UI e
 
 - Landing page with hero, about, teams, sponsors, contact, and footer sections
 - Dedicated **Tournament Hub** page
+- News feed and detailed news articles
+- Admin Dashboard to manage news, tournaments, homepage data, and contact messages
 - Game selection grid with branded game logos
 - Sample **Upcoming** and **Completed** tournament listings
 - Animated UI using `framer-motion`
@@ -24,28 +26,39 @@ This project is a cyberpunk-styled frontend with animated sections, glowing UI e
 - Tailwind CSS v4
 - Framer Motion
 - Lucide React
-- MySQL
-- mysql2
+- MongoDB
+- Mongoose
 
 ## Pages
 
 - `/` : Main website landing page
 - `/tournament-hub` : Tournament hub with game cards and tournament lists
+- `/news` : News feed and articles
+- `/admin` : Admin dashboard for content management
+- `/privacy-protocol`, `/rules-of-engagement`, `/terms-of-use` : Legal and information pages
 
 ## Project Structure
 
 ```text
 src/
   app/
+    admin/
+    api/
+    news/
+    tournament-hub/
     layout.tsx
     page.tsx
-    tournament-hub/
-      layout.tsx
-      page.tsx
   components/
+    admin/
+    news/
     sections/
     tournament/
     ui/
+  lib/
+    db/
+    home/
+    news/
+    tournaments/
 public/
   logo/
 ```
@@ -72,16 +85,16 @@ http://localhost:3000
 
 ## Backend Setup
 
-1. Copy the example environment file and fill in your MySQL credentials:
+1. Copy the example environment file:
 
 ```bash
 cp .env.example .env.local
 ```
 
-2. Create a MySQL database, for example:
+2. Fill in your MongoDB connection string in `.env.local`:
 
-```sql
-CREATE DATABASE elevation_esports;
+```env
+MONGODB_URI=mongodb://localhost:27017/elevation_esports
 ```
 
 3. Start the app:
@@ -90,13 +103,7 @@ CREATE DATABASE elevation_esports;
 npm run dev
 ```
 
-On first backend access, the app will:
-
-- connect to MySQL
-- create the core tables for `users`, `news_posts`, and `tournaments`
-- seed sample tournament records if the `tournaments` table is empty
-
-If MySQL is not configured yet, the tournament hub falls back to seeded sample data so the UI still works.
+On first backend access, the app will connect to MongoDB and use Mongoose models to manage `users`, `news_posts`, `tournaments`, and `uplink_messages`.
 
 ## Available Scripts
 
@@ -107,11 +114,15 @@ If MySQL is not configured yet, the tournament hub falls back to seeded sample d
 
 ## API Endpoints
 
-- `GET /api/tournaments` : Return upcoming and completed tournament data
+- `GET /api/tournaments` : Return tournament data
 - `POST /api/tournaments` : Create a tournament
-- `GET /api/tournaments/[slug]` : Return one tournament
-- `PATCH /api/tournaments/[slug]` : Update one tournament
-- `DELETE /api/tournaments/[slug]` : Delete one tournament
+- `DELETE /api/tournaments/[slug]` : Delete a tournament
+- `GET /api/news` : Return news data
+- `POST /api/news` : Create a news post
+- `DELETE /api/news/[slug]` : Delete a news post
+- `POST /api/uplink` : Submit contact message
+- `PATCH /api/uplink` : Update contact message read status
+- `DELETE /api/uplink` : Delete a contact message
 
 ## Design Notes
 
@@ -121,14 +132,12 @@ If MySQL is not configured yet, the tournament hub falls back to seeded sample d
 
 ## Current Status
 
-This project now includes a backend foundation for MySQL-backed tournament data. News, users, and future site content have starter tables ready in the schema, while the frontend still includes some placeholder links and unfinished flows.
+This project includes a backend foundation for MongoDB-backed data including Tournaments, News, and Contact messages (Uplink). An Admin Dashboard allows managing this data.
 
 ## Future Improvements
 
-- Connect tournament entries to real data
-- Add working registration and details pages
-- Hook up the contact form to a backend or email service
-- Add authentication for admin or player features
+- Add working registration flows for tournaments
+- Implement secure user authentication for the admin panel
 - Filter tournament lists by selected game
 
 ## License
