@@ -5,7 +5,7 @@ import type { NewsRecord } from "./types";
 
 export async function getNewsData(): Promise<{ source: "database" | "seed"; items: NewsRecord[] }> {
   if (!isDatabaseConfigured()) {
-    return { source: "database", items: [] };
+    return { source: "seed", items: [] };
   }
 
   try {

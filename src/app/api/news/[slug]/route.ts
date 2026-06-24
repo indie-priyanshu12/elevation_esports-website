@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db/mongoose";
 import { NewsPost } from "@/lib/db/models";
+import { requireAdminAuth } from "@/lib/auth/guard";
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
@@ -17,11 +18,23 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
 }
 
 export async function PUT(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const authError = await requireAdminAuth();
+  if (authError) return authError;
+
   try {
     const { slug } = await params;
     const body = await request.json();
     await connectToDatabase();
-    const updatedPost = await NewsPost.findOneAndUpdate({ slug }, body, { new: true });
+
+    // Whitelist fields to prevent MongoDB operator injection
+    const { title, summary, content, cover_image_url, is_published, published_at } = body;
+    const updateData = { title, summary, content, cover_image_url, is_published, published_at };
+
+    const updatedPost = await NewsPost.findOneAndUpdate(
+      { slug },
+      { $set: updateData },
+      { new: true }
+    );
     if (!updatedPost) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }
@@ -32,6 +45,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ slug
 }
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const authError = await requireAdminAuth();
+  if (authError) return authError;
+
   try {
     const { slug } = await params;
     await connectToDatabase();

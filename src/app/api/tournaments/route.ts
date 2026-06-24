@@ -1,5 +1,6 @@
 import { createTournamentEntry, getTournamentHubData } from "@/lib/tournaments/service";
 import type { TournamentMutationInput } from "@/lib/tournaments/types";
+import { requireAdminAuth } from "@/lib/auth/guard";
 
 export const runtime = "nodejs";
 
@@ -14,6 +15,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const authError = await requireAdminAuth();
+  if (authError) return authError;
+
   try {
     const payload = (await request.json()) as TournamentMutationInput;
     const tournament = await createTournamentEntry(payload);

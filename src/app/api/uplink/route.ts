@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db/mongoose";
 import { UplinkMessage } from "@/lib/db/models";
+import { requireAdminAuth } from "@/lib/auth/guard";
 
 export async function POST(request: Request) {
   try {
@@ -21,6 +22,9 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const authError = await requireAdminAuth();
+  if (authError) return authError;
+
   try {
     await connectToDatabase();
     const { searchParams } = new URL(request.url);
@@ -43,6 +47,9 @@ export async function DELETE(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const authError = await requireAdminAuth();
+  if (authError) return authError;
+
   try {
     await connectToDatabase();
     const body = await request.json();

@@ -4,6 +4,7 @@ import {
   updateTournamentEntry,
 } from "@/lib/tournaments/service";
 import type { TournamentMutationInput } from "@/lib/tournaments/types";
+import { requireAdminAuth } from "@/lib/auth/guard";
 
 export const runtime = "nodejs";
 
@@ -30,6 +31,9 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
+  const authError = await requireAdminAuth();
+  if (authError) return authError;
+
   try {
     const { slug } = await context.params;
     const payload = (await request.json()) as TournamentMutationInput;
@@ -47,6 +51,9 @@ export async function PATCH(request: Request, context: RouteContext) {
 }
 
 export async function DELETE(_request: Request, context: RouteContext) {
+  const authError = await requireAdminAuth();
+  if (authError) return authError;
+
   try {
     const { slug } = await context.params;
     const deleted = await deleteTournamentEntry(slug);

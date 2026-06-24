@@ -2,10 +2,14 @@ import { ensureDatabaseReady } from "@/lib/db/bootstrap";
 import { isDatabaseConfigured } from "@/lib/db/mongoose";
 import { createNews } from "@/lib/news/repository";
 import type { NewsMutationInput } from "@/lib/news/types";
+import { requireAdminAuth } from "@/lib/auth/guard";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const authError = await requireAdminAuth();
+  if (authError) return authError;
+
   try {
     if (!isDatabaseConfigured()) {
       return Response.json({ error: "MongoDB is not configured." }, { status: 500 });

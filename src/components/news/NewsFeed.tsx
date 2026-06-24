@@ -27,42 +27,52 @@ export function NewsFeed({ items, source }: { items: NewsRecord[], source: "data
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {items.map((news) => (
-          <motion.div 
-            key={news.id} 
-            whileHover={{ scale: 1.02, y: -5 }}
-            whileTap={{ scale: 0.95 }}
-            className="group relative bg-void/60 border border-white/10 rounded-xl overflow-hidden backdrop-blur-sm hover:border-cyber-purple/50 transition-all duration-300 flex flex-col cursor-pointer"
-            onClick={() => setSelectedNews(news)}
-          >
-            {/* Top Accent Line */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-cyber-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            
-            <div className="p-8 flex flex-col flex-grow">
-              <div className="mb-4">
-                <span className="font-display text-xs font-bold uppercase tracking-widest text-neon-cyan">
-                  {formatDate(news.publishedAt)}
-                </span>
+      {items.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <div className="text-5xl mb-6">📡</div>
+          <h3 className="font-display text-2xl text-ice mb-3 uppercase tracking-widest">No Transmissions Yet</h3>
+          <p className="font-mono text-ice/50 text-sm max-w-sm">
+            No news posts have been published yet. Check back soon for the latest updates.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {items.map((news) => (
+            <motion.div 
+              key={news.id} 
+              whileHover={{ scale: 1.02, y: -5 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative bg-void/60 border border-white/10 rounded-xl overflow-hidden backdrop-blur-sm hover:border-cyber-purple/50 transition-all duration-300 flex flex-col cursor-pointer"
+              onClick={() => setSelectedNews(news)}
+            >
+              {/* Top Accent Line */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-cyber-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="mb-4">
+                  <span className="font-display text-xs font-bold uppercase tracking-widest text-neon-cyan">
+                    {formatDate(news.publishedAt)}
+                  </span>
+                </div>
+                <h2 className="font-display text-xl md:text-2xl font-bold text-white uppercase tracking-wide mb-4 group-hover:text-cyber-purple transition-colors duration-300 line-clamp-2">
+                  {news.title}
+                </h2>
+                <p className="font-sans text-ice/70 leading-relaxed mb-8 flex-grow">
+                  {news.summary}
+                </p>
+                <div className="mt-auto">
+                  <span className="inline-flex items-center font-display text-sm font-bold uppercase tracking-cyber text-neon-pink group-hover:text-white transition-colors">
+                    Read Transmission
+                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </span>
+                </div>
               </div>
-              <h2 className="font-display text-xl md:text-2xl font-bold text-white uppercase tracking-wide mb-4 group-hover:text-cyber-purple transition-colors duration-300 line-clamp-2">
-                {news.title}
-              </h2>
-              <p className="font-sans text-ice/70 leading-relaxed mb-8 flex-grow">
-                {news.summary}
-              </p>
-              <div className="mt-auto">
-                <span className="inline-flex items-center font-display text-sm font-bold uppercase tracking-cyber text-neon-pink group-hover:text-white transition-colors">
-                  Read Transmission
-                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
 
       {/* Modal Overlay */}
       <AnimatePresence>

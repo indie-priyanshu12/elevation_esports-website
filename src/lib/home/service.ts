@@ -1,28 +1,75 @@
-import { connectToDatabase } from "../db/mongoose";
+import { connectToDatabase, isDatabaseConfigured } from "../db/mongoose";
 import { ensureDatabaseReady } from "../db/bootstrap";
 import { Achievement, HomeStat, Team, Sponsor } from "./models";
 
-export async function getHomeData() {
-  await ensureDatabaseReady();
-  let achievements = await Achievement.find().sort({ order: 1 }).lean();
-  let stats = await HomeStat.find().sort({ order: 1 }).lean();
-  let teams = await Team.find().sort({ order: 1 }).lean();
-  let sponsors = await Sponsor.find().sort({ order: 1 }).lean();
+const DEFAULT_ACHIEVEMENTS = [
+  { icon: "🏆", value: "+", label: "Tournaments Hosted", color: "text-neon-yellow", order: 1 },
+  { icon: "👥", value: "2,000+", label: "Participants", color: "text-neon-cyan", order: 2 },
+  { icon: "🎮", value: "8", label: "Supported Games", color: "text-neon-green", order: 3 },
+  { icon: "💰", value: "₹1,00,000+", label: "Prize Pool Distributed", color: "text-neon-pink", order: 4 },
+];
 
-  if (achievements.length === 0 || stats.length === 0 || teams.length === 0 || sponsors.length === 0) {
-    await seedHomeData();
-    achievements = await Achievement.find().sort({ order: 1 }).lean();
-    stats = await HomeStat.find().sort({ order: 1 }).lean();
-    teams = await Team.find().sort({ order: 1 }).lean();
-    sponsors = await Sponsor.find().sort({ order: 1 }).lean();
+const DEFAULT_STATS = [
+  { value: 450, label: "Active Operators", suffix: "+", order: 1 },
+  { value: 24, label: "Circuits Hosted", suffix: "", order: 2 },
+  { value: 12, label: "Trophies Secured", suffix: "", order: 3 },
+  { value: 5, label: "Elite Squadrons", suffix: "", order: 4 },
+];
+
+const DEFAULT_TEAMS = [
+  { game: "BGMI", captain: "ViperX", roster: "Shadow, Blaze, Nova", achievements: "Campus Champions '24", order: 1 },
+  { game: "Valorant", captain: "JettDiff", roster: "Omen, Sage, Reyna, Killjoy", achievements: "Regional Finalists", order: 2 },
+  { game: "CS2", captain: "Headshot", roster: "Flick, Spray, Nade, Flash", achievements: "Inter-College Winners", order: 3 },
+  { game: "Rocket League", captain: "Aerial", roster: "Boost, Demo", achievements: "Division 1 Leaders", order: 4 },
+];
+
+const DEFAULT_SPONSORS = [
+  { name: "SYS_1", order: 1 },
+  { name: "SYS_2", order: 2 },
+  { name: "SYS_3", order: 3 },
+  { name: "SYS_4", order: 4 },
+];
+
+export async function getHomeData() {
+  if (!isDatabaseConfigured()) {
+    return {
+      achievements: DEFAULT_ACHIEVEMENTS,
+      stats: DEFAULT_STATS,
+      teams: DEFAULT_TEAMS,
+      sponsors: DEFAULT_SPONSORS,
+    };
   }
 
-  return {
-    achievements: JSON.parse(JSON.stringify(achievements)),
-    stats: JSON.parse(JSON.stringify(stats)),
-    teams: JSON.parse(JSON.stringify(teams)),
-    sponsors: JSON.parse(JSON.stringify(sponsors)),
-  };
+  try {
+    await ensureDatabaseReady();
+    let achievements = await Achievement.find().sort({ order: 1 }).lean();
+    let stats = await HomeStat.find().sort({ order: 1 }).lean();
+    let teams = await Team.find().sort({ order: 1 }).lean();
+    let sponsors = await Sponsor.find().sort({ order: 1 }).lean();
+
+    if (achievements.length === 0 || stats.length === 0 || teams.length === 0 || sponsors.length === 0) {
+      await seedHomeData();
+      achievements = await Achievement.find().sort({ order: 1 }).lean();
+      stats = await HomeStat.find().sort({ order: 1 }).lean();
+      teams = await Team.find().sort({ order: 1 }).lean();
+      sponsors = await Sponsor.find().sort({ order: 1 }).lean();
+    }
+
+    return {
+      achievements: JSON.parse(JSON.stringify(achievements)),
+      stats: JSON.parse(JSON.stringify(stats)),
+      teams: JSON.parse(JSON.stringify(teams)),
+      sponsors: JSON.parse(JSON.stringify(sponsors)),
+    };
+  } catch (error) {
+    console.error("Failed to load home data from MongoDB, using defaults.", error);
+    return {
+      achievements: DEFAULT_ACHIEVEMENTS,
+      stats: DEFAULT_STATS,
+      teams: DEFAULT_TEAMS,
+      sponsors: DEFAULT_SPONSORS,
+    };
+  }
 }
 
 export async function seedHomeData() {
